@@ -1,0 +1,27 @@
+includes:
+	- vendor/phpstan/phpstan/conf/bleedingEdge.neon
+	- phpstan-baseline.neon
+
+parameters:
+	level: 9
+	paths:
+		- the-subscriber-purge.php
+		- includes/
+	excludePaths:
+		- vendor/
+		- tests/ (?)
+	ignoreErrors:
+		# WordPress core functions - not available in static analysis without proper stubs
+		-
+			identifier: 'function.notFound'
+		# WordPress class definitions
+		-
+			identifier: 'class.notFound'
+		# WordPress constants - defined by WordPress core
+		-
+			identifier: 'constant.notFound'
+			message: '#Constant (DAY_IN_SECONDS|MINUTE_IN_SECONDS|HOUR_IN_SECONDS|WEEK_IN_SECONDS|MONTH_IN_SECONDS|YEAR_IN_SECONDS) not found#'
+		# Type coercion with mixed types
+		-
+			identifier: 'argument.type'
+			message: '#Parameter.*intval expects#'

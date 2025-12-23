@@ -1,0 +1,78 @@
+{
+    "name": "wpcomvip/the-subscriber-purge",
+    "description": "Automatically purge inactive subscriber accounts to help keep user spam down",
+    "type": "wordpress-plugin",
+    "license": "GPL-2.0-or-later",
+    "authors": [
+        {
+            "name": "Derrick Tennant"
+        }
+    ],
+    "require": {
+        "php": ">=8.4"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.5",
+        "yoast/phpunit-polyfills": "^1.0",
+        "squizlabs/php_codesniffer": "^3.9",
+        "wp-coding-standards/wpcs": "^3.1",
+        "automattic/vipwpcs": "^3.0",
+        "phpcompatibility/phpcompatibility-wp": "^2.0",
+        "phpcsstandards/phpcsextra": "^1.2",
+        "phpcsstandards/phpcsutils": "^1.0",
+        "sirbrillig/phpcs-variable-analysis": "^2.11",
+        "phpstan/phpstan": "^2.1",
+        "shipmonk/dead-code-detector": "^0.14",
+        "php-stubs/wordpress-stubs": "^6.0",
+        "wpreadme2markdown/wp2md": "^4.1"
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "TheSubscriberPurge\\Tests\\": "tests/"
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "composer/installers": true,
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        }
+    },
+    "scripts": {
+        "post-install-cmd": [
+            "@setup-phpcs"
+        ],
+        "setup-phpcs": [
+            "phpcs --config-set installed_paths vendor/wp-coding-standards/wpcs,vendor/automattic/vipwpcs,vendor/phpcompatibility/php-compatibility,vendor/phpcompatibility/phpcompatibility-paragonie,vendor/phpcompatibility/phpcompatibility-wp,vendor/phpcsstandards/phpcsextra,vendor/phpcsstandards/phpcsutils,vendor/sirbrillig/phpcs-variable-analysis"
+        ],
+        "test": [
+            "./run-unit-tests.sh"
+        ],
+        "test:docker": [
+            "./run-unit-tests.sh"
+        ],
+        "test:coverage": [
+            "phpunit --configuration tests/phpunit.xml.dist --coverage-html tests/coverage/html --coverage-clover tests/coverage/coverage.xml"
+        ],
+        "phpcs": [
+            "phpcs --extensions=php ."
+        ],
+        "phpcbf": [
+            "phpcbf --extensions=php ."
+        ],
+        "lint": [
+            "@phpcs"
+        ],
+        "fix": [
+            "@phpcbf"
+        ],
+        "stan": [
+            "phpstan analyse -c phpstan.neon.dist --memory-limit=1G"
+        ],
+        "stan:baseline": [
+            "phpstan analyse -c phpstan.neon.dist --memory-limit=1G --generate-baseline=phpstan-baseline.neon"
+        ],
+        "readme": [
+            "vendor/bin/wp2md readme.txt README.md"
+        ]
+    }
+}

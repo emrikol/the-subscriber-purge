@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.5/phpunit.xsd"
+         bootstrap="bootstrap.php"
+         cacheResultFile=".phpunit.cache/test-results"
+         executionOrder="depends,defects"
+         forceCoversAnnotation="false"
+         beStrictAboutCoversAnnotation="false"
+         beStrictAboutOutputDuringTests="true"
+         beStrictAboutTodoAnnotatedTests="true"
+         failOnRisky="true"
+         failOnWarning="true"
+         colors="true"
+         verbose="true">
+    <testsuites>
+        <testsuite name="unit">
+            <directory>unit</directory>
+        </testsuite>
+    </testsuites>
+
+    <groups>
+        <exclude>
+            <group>slow</group>
+            <group>external-http</group>
+        </exclude>
+    </groups>
+
+    <coverage cacheDirectory=".phpunit.cache/code-coverage"
+              processUncoveredFiles="true">
+        <include>
+            <directory suffix=".php">../includes</directory>
+            <file>../the-subscriber-purge.php</file>
+        </include>
+        <exclude>
+            <directory>../vendor</directory>
+            <directory>../node_modules</directory>
+            <directory>../phpcs</directory>
+            <directory>../tests</directory>
+            <directory>../coverage</directory>
+        </exclude>
+        <report>
+            <html outputDirectory="coverage/html/"/>
+            <text outputFile="php://stdout" showUncoveredFiles="true"/>
+            <clover outputFile="coverage/coverage.xml"/>
+        </report>
+    </coverage>
+</phpunit>

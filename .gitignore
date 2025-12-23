@@ -1,0 +1,40 @@
+# Composer
+vendor/
+composer.lock
+*.lock
+
+# PHPUnit / Test Coverage
+tests/coverage/
+tests/.phpunit.cache
+tests/.phpunit.result.cache
+.phpunit.result.cache
+
+# PHPStan
+phpstan-baseline.neon
+
+# Dependencies
+node_modules/
+
+# IDE
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# OS
+.DS_Store
+.DS_Store?
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Local PHPCS config
+.phpcs.xml
+phpcs.xml
+
+# Plugin update logs
+updates-*.log
+
+# Claude Code settings
+.claude/

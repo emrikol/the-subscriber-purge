@@ -1,0 +1,39 @@
+# Dockerfile for PHP test environment with Xdebug coverage support
+FROM php:8.2-cli
+
+# Install system dependencies
+RUN apt-get update -qq && apt-get install -y -qq \
+    unzip \
+    git \
+    curl \
+    libzip-dev \
+    mariadb-client \
+    subversion \
+    libpng-dev \
+    libjpeg-dev \
+    libfreetype6-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# Configure and install PHP extensions
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install mysqli zip gd
+
+# Install Xdebug for coverage
+RUN pecl install xdebug \
+    && docker-php-ext-enable xdebug \
+    && echo "xdebug.mode=coverage" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+
+# Enable PHP error reporting for debugging tests
+RUN echo "display_errors = On" >> /usr/local/etc/php/conf.d/error-reporting.ini \
+    && echo "display_startup_errors = On" >> /usr/local/etc/php/conf.d/error-reporting.ini \
+    && echo "log_errors = On" >> /usr/local/etc/php/conf.d/error-reporting.ini \
+    && echo "error_log = /dev/stderr" >> /usr/local/etc/php/conf.d/error-reporting.ini \
+    && echo "error_reporting = E_ALL" >> /usr/local/etc/php/conf.d/error-reporting.ini
+
+# Install Composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+# Create cache directories
+RUN mkdir -p /cache/composer /cache/wp-tests
+
+WORKDIR /app
