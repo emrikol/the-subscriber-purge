@@ -1,8 +1,8 @@
 === The Subscriber Purge ===
 Contributors: emrikol
 Tags: spam, subscribers, users, cleanup, automation
-Requires at least: 4.0
-Tested up to: 6.7
+Requires at least: 6.9
+Tested up to: 6.9
 Requires PHP: 8.4
 Stable tag: 1.0.0
 License: GPL-2.0-or-later
