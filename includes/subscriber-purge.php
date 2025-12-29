@@ -85,7 +85,26 @@ function run_purge(): void {
 			send_admin_notification( $user );
 		}
 
-		wp_delete_user( $user->ID );
+		// Delete user - on multisite this requires wpmu_delete_user() to fully remove.
+		// We use null for reassign since subscribers shouldn't have content.
+		$deleted = false;
+
+		if ( is_multisite() ) {
+			// On multisite, wpmu_delete_user() removes from all sites and network.
+			require_once ABSPATH . 'wp-admin/includes/ms.php';
+			$deleted = wpmu_delete_user( $user->ID );
+		} else {
+			// On single site, wp_delete_user() removes the user completely.
+			require_once ABSPATH . 'wp-admin/includes/user.php';
+			$deleted = wp_delete_user( $user->ID );
+		}
+
+		// Log deletion failures for debugging.
+		if ( ! $deleted ) {
+			// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+			error_log( sprintf( 'The Subscriber Purge: Failed to delete user ID %d (%s)', $user->ID, $user->user_email ) );
+		}
+
 		break;
 	}
 }
